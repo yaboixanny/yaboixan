@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yaboixan CMS | Admin Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .admin-container {
+            max-width: 800px;
+            margin: 8rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(38, 34, 32, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+
+        textarea {
+            height: 150px;
+        }
+
+        .status-msg {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="logo">YABOIXAN ADMIN</div>
+        <div class="nav-links">
+            <a href="index.html">View Site</a>
+        </div>
+    </nav>
+
+    <div class="admin-container">
+        <h2 style="margin-bottom: 2rem; color: var(--primary);">Upload New Story</h2>
+        <form id="postForm">
+            <div class="form-group">
+                <label for="title">Post Title</label>
+                <input type="text" id="title" name="title" required placeholder="e.g. My Trip to Lviv">
+            </div>
+            <div class="form-group">
+                <label for="category">Category (Location • Type)</label>
+                <input type="text" id="category" name="category" required placeholder="e.g. Ukraine • Adventure">
+            </div>
+            <div class="form-group">
+                <label for="excerpt">Short Excerpt</label>
+                <textarea id="excerpt" name="excerpt" required
+                    placeholder="A brief hook for the blog card..."></textarea>
+            </div>
+            <div class="form-group">
+                <label for="image">Cover Image</label>
+                <input type="file" id="image" name="image" accept="image/*" required>
+            </div>
+            <button type="submit" class="btn-primary" style="border: none; cursor: pointer; width: 100%;">Publish
+                Story</button>
+        </form>
+        <div id="status" class="status-msg"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('postForm');
+        const status = document.getElementById('status');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+
+            status.style.display = 'block';
+            status.textContent = 'Uploading...';
+            status.className = 'status-msg';
+
+            try {
+                const response = await fetch('http://localhost:3001/api/posts', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    status.textContent = 'Success! Story published.';
+                    status.className = 'status-msg success';
+                    form.reset();
+                } else {
+                    throw new Error('Upload failed');
+                }
+            } catch (err) {
+                status.textContent = 'Error: ' + err.message;
+                status.className = 'status-msg error';
+            }
+        });
+    </script>
+</body>
+
+</html>
