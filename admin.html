@@ -68,7 +68,11 @@
     </nav>
 
     <div class="admin-container">
-        <h2 style="margin-bottom: 2rem; color: var(--primary);">Upload New Story</h2>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <h2 style="color: var(--primary); margin: 0;">Upload New Story</h2>
+            <button id="logoutBtn"
+                style="background: var(--neutral); color: var(--secondary); border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">Logout</button>
+        </div>
         <form id="postForm">
             <div class="form-group">
                 <label for="title">Post Title</label>
@@ -94,8 +98,20 @@
     </div>
 
     <script>
+        // Auth check
+        const token = localStorage.getItem('yaboixan_token');
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+
         const form = document.getElementById('postForm');
         const status = document.getElementById('status');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('yaboixan_token');
+            window.location.href = 'login.html';
+        });
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -108,6 +124,9 @@
             try {
                 const response = await fetch('http://localhost:3001/api/posts', {
                     method: 'POST',
+                    headers: {
+                        'Authorization': localStorage.getItem('yaboixan_token')
+                    },
                     body: formData
                 });
 
@@ -115,6 +134,8 @@
                     status.textContent = 'Success! Story published.';
                     status.className = 'status-msg success';
                     form.reset();
+                } else if (response.status === 401) {
+                    window.location.href = 'login.html';
                 } else {
                     throw new Error('Upload failed');
                 }
