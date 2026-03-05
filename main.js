@@ -36,12 +36,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!grid) return;
 
         try {
-            const response = await fetch('/api/posts');
+            const response = await fetch(`/api/posts?t=${Date.now()}`);
             const posts = await response.json();
 
             grid.innerHTML = posts.map(post => `
                 <article class="post-card">
-                    <img src="/public${post.image}" alt="${post.title}" class="post-image">
+                    <img src="${post.image}" alt="${post.title}" class="post-image">
                     <div class="post-content">
                         <span class="post-meta">${post.category}</span>
                         <h3>${post.title}</h3>
