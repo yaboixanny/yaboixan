@@ -45,17 +45,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const posts = await response.json();
 
-            grid.innerHTML = posts.map(post => `
-                <article class="post-card">
-                    <img src="${post.image}" alt="${post.title}" class="post-image">
-                    <div class="post-content">
-                        <span class="post-meta">${post.category}</span>
-                        <h3>${post.title}</h3>
-                        <p class="post-excerpt">${post.excerpt}</p>
-                        <a href="#" class="read-more">Read Story</a>
-                    </div>
-                </article>
-            `).join('');
+            grid.innerHTML = posts.map(post => {
+                const link = `post.html?id=${post.id}${post.slug ? '&slug=' + post.slug : ''}`;
+                return `
+                    <article class="post-card">
+                        <a href="${link}"><img src="${post.image}" alt="${post.title}" class="post-image"></a>
+                        <div class="post-content">
+                            <span class="post-meta">${post.category}</span>
+                            <h3><a href="${link}" style="text-decoration: none; color: inherit;">${post.title}</a></h3>
+                            <p class="post-excerpt">${post.excerpt}</p>
+                            <a href="${link}" class="read-more">Read Story</a>
+                        </div>
+                    </article>
+                `;
+            }).join('');
         } catch (err) {
             console.error('Error fetching posts:', err);
             grid.innerHTML = '<p>Failed to load stories.</p>';

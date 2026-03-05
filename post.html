@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Title | Yaboixan</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .post-header {
+            height: 60vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            background-size: cover;
+            background-position: center;
+            margin-top: 70px;
+        }
+
+        .post-header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(38, 34, 32, 0.5);
+        }
+
+        .post-header-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            padding: 0 5%;
+        }
+
+        .post-body {
+            max-width: 800px;
+            margin: 4rem auto;
+            padding: 0 5%;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            color: #444;
+        }
+
+        .post-body h2,
+        .post-body h3 {
+            color: var(--primary);
+            margin-top: 2.5rem;
+        }
+
+        .post-body p {
+            margin-bottom: 1.5rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <nav style="background: rgba(22, 78, 99, 0.95); padding: 1rem 5%;">
+        <div class="logo">YABOIXAN</div>
+        <div class="nav-links">
+            <a href="index.html#home" style="color: #F5E6D3;">Home</a>
+            <a href="index.html#stories" style="color: #F5E6D3;">Stories</a>
+            <a href="index.html#about" style="color: #F5E6D3;">About</a>
+        </div>
+    </nav>
+
+    <header class="post-header" id="postHero">
+        <div class="post-header-content">
+            <span class="hero-subtitle" id="postCategory" style="color: #F5E6D3;">Category</span>
+            <h1 id="postTitle" style="color: white; font-size: 3.5rem;">Loading Article...</h1>
+            <p id="postDate" style="opacity: 0.8; font-style: italic;"></p>
+        </div>
+    </header>
+
+    <main class="post-body">
+        <a href="index.html#stories" class="back-link">← Back to Stories</a>
+        <div id="postContent">
+            <!-- Content will be injected here -->
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-logo">YABOIXAN</div>
+        <p>&copy; 2026 Alexander. All rights reserved.</p>
+    </footer>
+
+    <script type="module">
+        import { marked } from 'https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js';
+
+        async function loadPost() {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+            const slug = params.get('slug');
+
+            if (!id && !slug) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            try {
+                // Fetch posts from the static JSON file
+                const response = await fetch('/posts.json');
+                const posts = await response.json();
+
+                const post = posts.find(p => p.id == id || p.slug == slug);
+
+                if (post) {
+                    document.title = `${post.title} | Yaboixan`;
+                    document.getElementById('postHero').style.backgroundImage = `url(${post.image})`;
+                    document.getElementById('postTitle').textContent = post.title;
+                    document.getElementById('postCategory').textContent = post.category;
+                    document.getElementById('postDate').textContent = post.date;
+                    document.getElementById('postContent').innerHTML = marked.parse(post.content || post.excerpt);
+                } else {
+                    document.getElementById('postContent').innerHTML = '<p>Story not found.</p>';
+                }
+            } catch (err) {
+                console.error('Error loading post:', err);
+                document.getElementById('postContent').innerHTML = '<p>Failed to load the story.</p>';
+            }
+        }
+
+        loadPost();
+    </script>
+</body>
+
+</html>
