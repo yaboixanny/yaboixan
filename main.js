@@ -36,7 +36,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!grid) return;
 
         try {
-            const response = await fetch(`/api/posts?t=${Date.now()}`);
+            let response = await fetch(`/api/posts?t=${Date.now()}`);
+            if (!response.ok) {
+                // Fallback to static JSON file if API is not available (e.g., on live static host)
+                response = await fetch(`/posts.json?t=${Date.now()}`);
+            }
+            if (!response.ok) throw new Error('Failed to fetch posts');
+
             const posts = await response.json();
 
             grid.innerHTML = posts.map(post => `

@@ -10,8 +10,8 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = 3001;
-const POSTS_FILE = path.join(__dirname, 'posts.json');
-const UPLOADS_DIR = path.join(__dirname, 'public/images');
+const POSTS_FILE = path.join(__dirname, 'public', 'posts.json');
+const UPLOADS_DIR = path.join(__dirname, 'public', 'images');
 
 // Middleware
 app.use(cors());
