@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!grid) return;
 
         try {
-            const response = await fetch('http://localhost:3001/api/posts');
+            const response = await fetch('/api/posts');
             const posts = await response.json();
 
             grid.innerHTML = posts.map(post => `
