@@ -1,4 +1,9 @@
-# Admin and main pages take precedence (though Netlify handles existing files automatically)
+# Exclude API calls and static assets from the global rewrite
+/api/*      /404            404
+/images/*   /images/:splat  200
+/posts.json /posts.json     200
+
+# Admin and local files
 /admin      /admin.html     200
 /index      /index.html     200
 
