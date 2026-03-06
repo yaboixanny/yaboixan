@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const posts = await response.json();
 
             grid.innerHTML = posts.map(post => {
-                const link = `post.html?id=${post.id}${post.slug ? '&slug=' + post.slug : ''}`;
+                const link = `/${post.slug}/`;
                 return `
                     <article class="post-card">
                         <a href="${link}"><img src="${post.image}" alt="${post.title}" class="post-image"></a>

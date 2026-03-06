@@ -1,0 +1,6 @@
+# Admin and main pages take precedence (though Netlify handles existing files automatically)
+/admin      /admin.html     200
+/index      /index.html     200
+
+# Rewrite all other paths to post.html to handle slugs
+/*          /post.html      200

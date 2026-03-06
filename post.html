@@ -49,7 +49,8 @@
         .post-body h2,
         .post-body h3 {
             color: var(--primary);
-            margin-top: 2.5rem;
+            margin-top: 4rem;
+            margin-bottom: 1.5rem;
         }
 
         .post-body p {
@@ -173,9 +174,9 @@
     <nav style="background: rgba(22, 78, 99, 0.95); padding: 1rem 5%;">
         <div class="logo">YABOIXAN</div>
         <div class="nav-links">
-            <a href="index.html#home" style="color: #F5E6D3;">Home</a>
-            <a href="index.html#stories" style="color: #F5E6D3;">Stories</a>
-            <a href="index.html#about" style="color: #F5E6D3;">About</a>
+            <a href="/#home" style="color: #F5E6D3;">Home</a>
+            <a href="/#stories" style="color: #F5E6D3;">Stories</a>
+            <a href="/#about" style="color: #F5E6D3;">About</a>
         </div>
     </nav>
 
@@ -188,7 +189,7 @@
     </header>
 
     <main class="post-body">
-        <a href="index.html#stories" class="back-link">← Back to Stories</a>
+        <a href="/#stories" class="back-link">← Back to Stories</a>
         <div id="postContent">
             <!-- Content will be injected here -->
         </div>
@@ -245,9 +246,19 @@
         async function loadPost() {
             const params = new URLSearchParams(window.location.search);
             const id = params.get('id');
-            const slug = params.get('slug');
+            let slug = params.get('slug');
+
+            // Fallback: Check if the slug is in the path (e.g., /perouges-france/)
+            if (!slug && !id) {
+                const pathParts = window.location.pathname.split('/').filter(p => p);
+                if (pathParts.length > 0 && pathParts[0] !== 'post.html') {
+                    slug = pathParts[0];
+                }
+            }
 
             if (!id && !slug) {
+                // If it's just the root or post.html without params, handle locally or redirect
+                if (window.location.pathname === '/' || window.location.pathname.endsWith('index.html')) return;
                 window.location.href = 'index.html';
                 return;
             }
