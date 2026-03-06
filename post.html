@@ -64,12 +64,50 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
 
-        .back-link {
-            display: inline-block;
+        .gallery-container {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 5%;
+            display: none;
+            /* Hidden by default, shown if gallery exists */
+        }
+
+        .gallery-title {
+            text-align: center;
+            color: var(--primary);
             margin-bottom: 2rem;
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 600;
+            font-size: 2.5rem;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .gallery-item {
+            aspect-ratio: 3/2;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @media (max-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+            }
         }
     </style>
 </head>
@@ -98,6 +136,13 @@
             <!-- Content will be injected here -->
         </div>
     </main>
+
+    <section class="gallery-container" id="galleryContainer">
+        <h2 class="gallery-title">The Full Gallery</h2>
+        <div class="gallery-grid" id="galleryGrid">
+            <!-- Gallery images will be injected here -->
+        </div>
+    </section>
 
     <footer>
         <div class="footer-logo">YABOIXAN</div>
@@ -131,6 +176,18 @@
                     document.getElementById('postCategory').textContent = post.category;
                     document.getElementById('postDate').textContent = post.date;
                     document.getElementById('postContent').innerHTML = marked.parse(post.content || post.excerpt);
+
+                    // Render gallery if it exists
+                    if (post.gallery && post.gallery.length > 0) {
+                        const galleryContainer = document.getElementById('galleryContainer');
+                        const galleryGrid = document.getElementById('galleryGrid');
+                        galleryContainer.style.display = 'block';
+                        galleryGrid.innerHTML = post.gallery.map(img => `
+                            <div class="gallery-item">
+                                <img src="${img}" alt="Gallery image for ${post.title}" loading="lazy">
+                            </div>
+                        `).join('');
+                    }
                 } else {
                     document.getElementById('postContent').innerHTML = '<p>Story not found.</p>';
                 }
