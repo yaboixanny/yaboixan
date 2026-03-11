@@ -4,6 +4,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import multer from 'multer';
 import cors from 'cors';
+import { exec } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -46,6 +47,7 @@ app.post('/api/posts', upload.single('image'), (req, res) => {
         category: req.body.category,
         excerpt: req.body.excerpt,
         content: req.body.content,
+        slug: req.body.slug || req.body.title.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-'),
         image: req.file ? `/images/${req.file.filename}` : '/images/hero.png',
         date: new Date().toISOString().split('T')[0]
     };
@@ -57,6 +59,15 @@ app.post('/api/posts', upload.single('image'), (req, res) => {
 
         fs.writeFile(POSTS_FILE, JSON.stringify(posts, null, 4), (err) => {
             if (err) return res.status(500).json({ error: 'Failed to save post' });
+
+            // Re-generate sitemap
+            exec('node scripts/generate-sitemap.js', (error, stdout, stderr) => {
+                if (error) {
+                    console.error(`Sitemap generation error: ${error}`);
+                }
+                console.log(`Sitemap generated: ${stdout}`);
+            });
+
             res.json(newPost);
         });
     });
