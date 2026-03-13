@@ -1,17 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
 
 :root {
-    --primary: #164E63;    /* Forest Pine Green */
-    --secondary: #F5E6D3;  /* Sand/Beige */
-    --accent: #9A3412;     /* Deep Rust */
-    --neutral: #262220;    /* Dark Coffee */
+    --primary: #164E63;
+    /* Forest Pine Green */
+    --secondary: #F5E6D3;
+    /* Sand/Beige */
+    --accent: #9A3412;
+    /* Deep Rust */
+    --neutral: #262220;
+    /* Dark Coffee */
     --light: #FAF7F2;
     --text-main: #262220;
     --text-muted: #57534E;
-    
+
     --font-heading: 'Playfair Display', serif;
     --font-body: 'Outfit', sans-serif;
-    
+
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -29,7 +33,10 @@ body {
     overflow-x: hidden;
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
     font-family: var(--font-heading);
     font-weight: 700;
     line-height: 1.2;
@@ -101,8 +108,8 @@ nav {
     justify-content: center;
     text-align: center;
     color: white;
-    background: linear-gradient(rgba(38, 34, 32, 0.5), rgba(38, 34, 32, 0.3)), 
-                url('/public/images/hero.png') no-repeat center center/cover;
+    background: linear-gradient(rgba(38, 34, 32, 0.5), rgba(38, 34, 32, 0.3)),
+        url('/public/images/hero.webp') no-repeat center center/cover;
     position: relative;
 }
 
@@ -127,7 +134,9 @@ nav {
 }
 
 @media (max-width: 768px) {
-    .hero h1 { font-size: 3rem; }
+    .hero h1 {
+        font-size: 3rem;
+    }
 }
 
 /* Blog Container */

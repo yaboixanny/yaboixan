@@ -48,7 +48,7 @@ app.post('/api/posts', upload.single('image'), (req, res) => {
         excerpt: req.body.excerpt,
         content: req.body.content,
         slug: req.body.slug || req.body.title.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-'),
-        image: req.file ? `/images/${req.file.filename}` : '/images/hero.png',
+        image: req.file ? `/images/${req.file.filename}` : '/images/hero.webp',
         date: new Date().toISOString().split('T')[0]
     };
 
